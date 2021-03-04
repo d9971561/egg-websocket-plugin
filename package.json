@@ -8,10 +8,7 @@
   "eggPlugin": {
     "name": "websocket"
   },
-  "keywords": [
-    "websocket",
-    "ws"
-  ],
+  "keywords": [],
   "types": "./index.d.ts",
   "peerDependencies": {
     "egg": "^2.26.0"
