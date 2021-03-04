@@ -1,7 +1,7 @@
 {
-  "name": "@devintsai/egg-websocket",
+  "name": "degg-websocket",
   "version": "1.0.0",
-  "description": "Egg standard WebSocket module",
+  "description": "Egg standard WebSocket module self-use",
   "egg": {
     "typescript": true
   },
