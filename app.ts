@@ -5,7 +5,6 @@ import * as compose from 'koa-compose';
 import { Socket } from 'net';
 import * as url from 'url';
 import * as WebSocket from 'ws';
-import { EggRouter as Router } from '@eggjs/router';
 import { RedisPubSuber } from './adapter/redis';
 
 /**
@@ -180,14 +179,14 @@ export class EggWsServer {
       });
       assert(
         isFunction(obj),
-        `[egg-websocket-plugin]: controller '${controller}' not exists`
+        `[egg-websocket]: controller '${controller}' not exists`
       );
       controller = obj;
     }
     // ensure controller is exists
     assert(
       isFunction(controller),
-      '[egg-websocket-plugin]: controller not exists'
+      '[egg-websocket]: controller not exists'
     );
     return controller;
   }
@@ -195,7 +194,6 @@ export class EggWsServer {
   server: WebSocket.Server;
   private _app: Application;
   private _adapter?: PubSuber;
-  private _router = new Router();
   private _middlewares: any[];
   private _routerUsed = false;
   public clients = new Set();
@@ -211,7 +209,7 @@ export class EggWsServer {
         return;
       }
       // istanbul ignore next
-      app.logger.error('[egg-websocket-plugin] error: ', e.message);
+      app.logger.error('[egg-websocket] error: ', e.message);
     });
 
     if (config && config.redis) {
@@ -233,14 +231,15 @@ export class EggWsServer {
       return this.notFound(socket);
     }
 
+    const router = this._app.router
     const pathname = url.parse(request.url).pathname;
-    const matches = this._router.match(pathname, 'GET');
+    const matches = router.match(pathname, 'GET');
 
     // check if the route has a handler or not
     if (!matches.route) {
       return this.notFound(socket);
     }
-    const controller = this._router.routes();
+    const controller = router.routes();
     // upgrade to websocket connection
     this.server.handleUpgrade(request, socket, head, conn => {
       this.server.emit('connection', conn, request);
@@ -271,7 +270,7 @@ export class EggWsServer {
   public get adapter(): PubSuber | undefined {
     if (!this._adapter) {
       const err = new Error(
-        '[egg-websocket-plugin] redis pub/sub adapter configure not found'
+        '[egg-websocket] redis pub/sub adapter configure not found'
       );
       this.server.emit('error', err);
     }
@@ -281,24 +280,24 @@ export class EggWsServer {
   use(middleware) {
     assert(
       isFunction(middleware),
-      '[egg-websocket-plugin] middleware should be a function'
+      '[egg-websocket] middleware should be a function'
     );
     if (this._middlewares.includes(middleware)) {
       this._app.logger.warn(
-        '[egg-websocket-plugin] same middleware has been used'
+        '[egg-websocket] same middleware has been used'
       );
       return;
     }
     if (this._routerUsed) {
       this._app.logger.warn(
-        '[egg-websocket-plugin] app.ws.use should used before all app.ws.route'
+        '[egg-websocket] app.ws.use should used before all app.ws.route'
       );
     }
     this._middlewares.push(middleware);
   }
 
   route(path, ...middleware) {
-    assert(middleware.length > 0, '[egg-websocket-plugin] controller not set');
+    assert(middleware.length > 0, '[egg-websocket] controller not set');
     // get last middleware as handler
     const handler = middleware.pop();
     const app = this._app;
@@ -327,7 +326,7 @@ export class EggWsServer {
       waitWebSocket(controller),
     ]);
 
-    this._router.all(path, composedMiddleware);
+    app.router.all(path, composedMiddleware);
   }
 
   sendTo(room: string, data: ArrayBufferLike | string) {

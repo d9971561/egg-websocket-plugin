@@ -305,6 +305,12 @@ ws.addEventListener('message', data => {
 
 
 
+## 聲明
+
+fork 自 https://github.com/flarestart/egg-websocket-plugin/issues 進行小幅度修改，以用於自用
+
+
+
 ## License
 
 [MIT](LICENSE)

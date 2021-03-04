@@ -1,7 +1,7 @@
 {
-  "name": "egg-websocket-plugin",
-  "version": "1.0.1",
-  "description": "Egg standard WebSocket plugin",
+  "name": "@devintsai/egg-websocket",
+  "version": "1.0.0",
+  "description": "Egg standard WebSocket module",
   "egg": {
     "typescript": true
   },
@@ -9,9 +9,6 @@
     "name": "websocket"
   },
   "keywords": [
-    "egg",
-    "eggPlugin",
-    "egg-plugin",
     "websocket",
     "ws"
   ],
@@ -20,7 +17,9 @@
     "egg": "^2.26.0"
   },
   "dependencies": {
-    "ws": "^7.2.1"
+    "ws": "^7.2.1",
+    "@types/ws": "^6.0.4",
+    "ioredis": "^4.0.0"
   },
   "optionalDependencies": {
     "@types/ws": "^6.0.4",
@@ -63,12 +62,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/flarestart/egg-websocket-plugin.git"
+    "url": "git+https://github.com/d9971561/egg-websocket-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/flarestart/egg-websocket-plugin/issues"
+    "url": "https://github.com/d9971561/egg-websocket-plugin/issues"
   },
-  "homepage": "https://github.com/flarestart/egg-websocket-plugin#readme",
+  "homepage": "https://github.com/d9971561/egg-websocket-plugin#readme",
   "author": "flarestart",
   "license": "MIT"
 }
